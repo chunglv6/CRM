@@ -1,0 +1,1 @@
+package com.viettel.etc.dto;import lombok.AllArgsConstructor;import lombok.Data;import lombok.NoArgsConstructor;@Data@NoArgsConstructor@AllArgsConstructorpublic class SaleTransVehicleOwnerAppDTO extends SaleTransDTO{    String saleTransCode;    String plateNumber;    String actReasonName;    String actTypeName;    String fromDate;    String toDate;}

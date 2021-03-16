@@ -1,0 +1,13 @@
+FROM 10.60.156.72/library/openjdk:8-jdk-alpine
+
+WORKDIR /
+
+COPY ./serviceEtc-0.0.1-SNAPSHOT.jar ./serviceEtc-0.0.1-SNAPSHOT.jar
+
+COPY ./viettelpay_private.pem ./viettelpay_private.pem
+
+RUN cp /usr/share/zoneinfo/Asia/Ho_Chi_Minh /etc/localtime
+
+EXPOSE 8989
+
+ENTRYPOINT ["java","-jar","/serviceEtc-0.0.1-SNAPSHOT.jar"]

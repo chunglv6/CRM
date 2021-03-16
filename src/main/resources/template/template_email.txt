@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<meta charset=\"UTF-8\">
+<html>
+<body>
+<p><b>THÔNG BÁO THÔNG TIN TÀI KHOẢN</b></p>
+<br>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><i> Kính gửi quý khách hàng: PARAM1 </b></i></p>
+<p>ePass xin gửi tới quý khách hàng thông tin tài khoản : </p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Tên tài khoản:<b> PARAM2 </b></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Mật khẩu:<b> PARAM3 </b></p>
+<br>
+<p>Để được hỗ trợ trực tiếp quý khách vui lòng liên hệ hotline CSKH: <b>19009080</b></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><i>Trân trọng cảm ơn quý khách đã tin tưởng sử dụng ePass và đồng hành cùng chúng tôi!</b></i></p>
+</body>
+</html>

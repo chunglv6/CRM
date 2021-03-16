@@ -1,0 +1,1 @@
+package com.viettel.etc.repositories;import com.viettel.etc.dto.AttachmentFileDTO;import java.util.List;/** * Autogen class Repository Interface: Thong tin tep dinh kem * * @author toolGen * @date Fri Jul 03 10:59:23 ICT 2020 */public interface AttachmentFileRepository {    List<AttachmentFileDTO> getFileByAttachId(Long id);}

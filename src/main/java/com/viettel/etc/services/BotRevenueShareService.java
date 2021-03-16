@@ -1,0 +1,1 @@
+package com.viettel.etc.services;import com.viettel.etc.dto.BotRevenueShareDTO;/** * Autogen class: Lop thao tac danh sach BOT * * @author ToolGen * @date Thu Jul 23 14:32:22 ICT 2020 */public interface BotRevenueShareService {    Object getBotRevenueShare(BotRevenueShareDTO itemParamsEntity);}

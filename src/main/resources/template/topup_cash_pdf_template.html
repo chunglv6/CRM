@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <style>
+        body {
+            width: 100%;
+            font-family: "Times New Roman";
+            font-size: 15px;
+        }
+
+        .header h3{
+            margin: 0;
+        }
+        .title_name {
+            text-align: center;
+        }
+
+        .title_name h3 {
+            margin: 0;
+        }
+
+        .title_no {
+            text-align: right;
+            margin-right: 100px;
+        }
+
+        .title_no p {
+            margin: 5px;
+        }
+
+        .body_content p {
+            margin: 2px;
+        }
+
+        .body_content {
+            margin-left: 20px;
+        }
+
+        .body_content_amount {
+            width: 100%;
+        }
+
+        .footer {
+            margin-top: 50px;
+            margin-left: 20px;
+            width: 100%;
+        }
+        .footer table{
+            width: 100%;
+        }
+        .footer_table_th span{
+            font-weight: 100;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="body__document">
+        <div class="header">
+            <h3>CÔNG TY CỔ PHẦN GIAO THÔNG SỐ VIỆT NAM</h3>
+            <span style="font-weight: bold;">Địa chỉ: </span><span th:class="address" th:text="${BOO_ADDRESS}">So 1 THD</span>
+        </div>
+        <div class="title_name">
+            <h3>BIÊN LAI THU TIỀN</h3>
+            <span th:text="${today}">10/29/2020</span>
+        </div>
+        <div class="title_no">
+            <div>
+            <span>Quyển số: <span th:text="${data.volumeNo}">2020</span></span><br>
+            <span>Số: <span th:text="${data.no}">1235</span></span>
+            </div>
+        </div>
+        <div class="body_content">
+            <p>Họ và tên người nộp :<span th:text="${data.topupPayer}"></span></p>
+            <p>Địa chỉ: <span th:text="${ADDRESS}"></span></p>
+            <p>Nội dung thu tiền: <span style="font-weight: bold;">Nộp tiền vào tài khoản ETC</span></p>
+            <p>Số tài khoản ETC: <span th:text="${CONTRACT_NO}"></span></p>
+            <div class="body_content_amount">
+                <span>Số tiền thu: <span th:text="${#numbers.formatDecimal(data.amount, 0, 'COMMA', 2, 'POINT')}">0</span></span>
+                <span style="  margin-left: 160px; ">(Viết bằng chữ): <span th:text="${TEXT_AMOUNT}"></span></span>
+            </div>
+
+        </div>
+        <div class="footer">
+            <table class="table">
+                <thead style="width: 100%;">
+                <tr>
+                    <th  class="footer_table_th"> <span>Người nộp tiền</span><br>
+                         <span>(Ký, họ tên)</span><br>
+                        <span th:text="${data.topupPayer}">Topup Payer</span>
+                    </th>
+
+                    <th class="footer_table_th"> <span>Người thu tiền</span><br>
+                        <span>(Ký, họ tên)</span><br>
+                        <span th:text="${data.staffName}"> Staff Name</span>
+                    </th>
+
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

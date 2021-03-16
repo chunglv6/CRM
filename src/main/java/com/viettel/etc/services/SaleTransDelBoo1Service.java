@@ -1,0 +1,1 @@
+package com.viettel.etc.services;import com.viettel.etc.dto.SaleTransDelBoo1DTO;/** * Autogen class: Lop thao tac huy ve lien thong BOO * * @author ToolGen * @date Sat Oct 03 09:32:15 ICT 2020 */public interface SaleTransDelBoo1Service {    Object getSaleTransDelBoo1(SaleTransDelBoo1DTO itemParamsEntity);}

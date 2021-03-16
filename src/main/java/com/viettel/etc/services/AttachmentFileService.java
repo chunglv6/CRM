@@ -1,0 +1,1 @@
+package com.viettel.etc.services;import com.viettel.etc.dto.AttachmentFileDTO;/** * Autogen class: Thong tin tep dinh kem * * @author ToolGen * @date Fri Jul 03 10:59:23 ICT 2020 */public interface AttachmentFileService {    AttachmentFileDTO getFileByAttachId(Long id);}

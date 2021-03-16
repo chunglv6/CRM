@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<meta charset=\"UTF-8\">
+<html>
+<body>
+<p><b>Thông báo Chương Trình Quay Số Trúng Thưởng của ePass Tết Tân Sửu 2021 của ePass</b></p>
+<br>
+<p>Chúc mừng Quý Khách Hàng <b><i> PARAM1 </b></i> đã may mắn được tham gia vào Chương Trình Quay Số Trúng Thưởng của ePass Tết Tân Sửu 2021 của ePass. Mã tham dự may mắn của quý khách là <b><i> PARAM2 </b></i>, Quý Khách hàng hãy đón chờ livestream của chúng tôi trên fanpage ePass- Thu Phí Không Dừng của chúng tôi vào ngày <b><i> 21/02/2021 </b></i> này nhé.</p>
+<br>
+<p>Để được hỗ trợ trực tiếp quý khách vui lòng liên hệ hotline CSKH: <b>19009080</b></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><i>Trân trọng cảm ơn quý khách đã tin tưởng sử dụng ePass và đồng hành cùng chúng tôi!</b></i></p>
+</body>
+</html>

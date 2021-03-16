@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+  <style>
+    body {
+      font-family: "Times New Roman"; /* font-family: Times New Roman; - alternative. Without ""! */
+      font-size: 9px;
+    }
+    table {
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    th {
+     border:1px solid black!important;
+     padding: 3px;
+     text-align:center;
+     background-color: #fc9403c2;
+    }
+
+    tr,td{
+      border:1px solid black!important;
+      padding:2px;
+    }
+    .header{
+      font-size: 14px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .sub-header{
+      font-size: 9px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+  <body>
+    <p th:class="header" th:text="${title}">aaa</p>
+
+  <table align="center" cellpadding="1px" cellspacing="1px">
+    <th>STT</th>
+    <th>Trạm/đoạn</th>
+    <th>RFID</th>
+    <th>Biển số xe</th>
+    <th>Loại biển số</th>
+    <th>Loại xe</th>
+    <th th:text="${exceptionGroup} == 2 ? 'Ưu tiên/cấm' : 'Loại ngoại lệ'">Loại ngoại lệ</th>
+    <th th:if="${exceptionGroup} == 1">Nội dung</th>
+    <th>Ghi chú</th>
+    <th>Trạng thái</th>
+    <th>Ngày hiệu lực</th>
+    <th>Ngày tạo</th>
+    <th>Người tạo</th>
+    <th>Ngày duyệt</th>
+    <th>Ngày hủy</th>
+    <tr th:each="item, i: ${items}">
+      <td style="width:3%"  th:utext="${i.index + 1}" align="center">stt</td>
+      <td style="width:6%"  th:utext="${item.stationStageName}">stationStageName</td>
+      <td style="width:6%"  th:utext="${item.rfidSerial}">epc</td>
+      <td style="width:6%"  th:utext="${item.plateNumber}">plateNumber</td>
+      <td style="width:6%"  th:utext="${item.plateName}">plateType</td>
+      <td style="width:6%"  th:utext="${item.vehicleTypeName}">vehicleType</td>
+      <td style="width:6%"  th:utext="${item.exceptionName}">exceptionType</td>
+      <td style="width:6%"  th:utext="${item.content}" th:if="${exceptionGroup} == 1">content</td>
+      <td style="width:6%"  th:utext="${item.description}">note</td>
+      <td style="width:6%"  th:utext="${item.statusName}">status</td>
+      <td style="width:10%" th:utext="${item.effTime}">effDate</td>
+      <td style="width:10%" th:utext="${#dates.format(item.createDate, 'dd-MM-yyyy')}">createDate</td>
+      <td style="width:5%"  th:utext="${item.createUser}">createUser</td>
+      <td style="width:10%" th:utext="${#dates.format(item.approvedDate, 'dd-MM-yyyy')}" align="center">approveDate</td>
+      <td style="width:10%" th:utext="${#dates.format(item.cancelDate, 'dd-MM-yyyy')}" align="center">cancelDate</td>
+    </tr>
+  </table>
+
+  </body>
+</html>

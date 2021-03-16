@@ -1,0 +1,3959 @@
+{
+	"info": {
+		"_postman_id": "35aa3c3c-0b2d-4617-98c8-465c4bcfff1e",
+		"name": "ETC_CRM",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"access_token\");\r",
+							"});\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"\tpm.globals.set(\"access_token\", jsonData.access_token);\r",
+							"    console.log(\"Access_token: \",jsonData.access_token);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "admin_crm",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "crm",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "ca3f5f5b-ad99-4a5e-8125-a742e26761b6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{keycloack}}/auth/realms/etc-internal/protocol/openid-connect/token",
+					"host": [
+						"{{keycloack}}"
+					],
+					"path": [
+						"auth",
+						"realms",
+						"etc-internal",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "searchTreeInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"});\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"\r",
+							"pm.variables.get(\"contractId\");\r",
+							"pm.globals.set(\"custId\", jsonData.data.listData[0].custId);\r",
+							"\r",
+							"console.log(\"custId Use for after Request \", jsonData.data.listData[0].custId)\r",
+							"\r",
+							"// pm.globals.set(\"contractId\", jsonData.data.listData[0].contracts[0].contractId);\r",
+							"\r",
+							"// console.log(\"contractId Use Request \", jsonData.data.listData[0].contracts[0].contractId)\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addCustomerEnterprise",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"custId\");\r",
+							"});\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"\r",
+							"pm.globals.set(\"custIdInsert\", jsonData.data.custId);\r",
+							"\r",
+							"console.log(\"custIdInsert Use for after Request \", jsonData.data.custId)\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let date = Date.now()\r",
+							"pm.globals.set(\"date\", date);\r",
+							"console.log(date)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"documentTypeId\":10,\r\n    \"custTypeId\":6,\r\n    \"custId\":0,\r\n    \"phoneNumber\":\"0347173624\",\r\n    \"custName\":\"doanhNghiepTestAuto\",\r\n    \"taxCode\":\"{{date}}\",\r\n    \"birthDate\":\"03/02/2016 00:00:00\",\r\n    \"documentNumber\":\"12345678556\",\r\n    \"dateOfIssue\":\"10/10/2017 00:00:00\",\r\n    \"placeOfIssue\":\"skssss\",\r\n    \"areaCode\":\"B281004002\",\r\n    \"street\":\"số 1\",\r\n    \"areaName\":\"số 1 - Bằng Lũng - Chợ Đồn - Bắc Kạn\",\r\n    \"email\":\"a@gmail.com\",\r\n    \"repName\":\"hien\",\r\n    \"repBirthDate\":\"09/09/1996 00:00:00\",\r\n    \"repGender\":\"2\",\r\n    \"repIdentityTypeId\":1,\r\n    \"repIdentityNumber\":\"1234665678\",\r\n    \"repDateOfIssue\":\"16/06/2010 00:00:00\",\r\n    \"repPlaceOfIssue\":\"ssss\",\r\n    \"repAreaCode\":\"V064003006\",\r\n    \"repStreet\":\"số 1\",\r\n    \"repAreaName\":\"số 1 - Bình Ba - Châu Đức - Bà Rịa Vũng Tàu\",\r\n    \"repPhoneNumber\":\"\",\r\n    \"repEmail\":\"\",\r\n    \"authIdentityNumber\":\"\",\r\n    \"authIdentityTypeId\":\"\",\r\n    \"authDateOfIssue\":null,\r\n    \"authPlaceOfIssue\":\"\",\r\n    \"authName\":\"\",\r\n    \"authBirthDate\":null,\r\n    \"authGender\":\"\",\r\n    \"authAreaName\":\"\",\r\n    \"authStreet\":\"\",\r\n    \"authAreaCode\":\"\",\r\n    \"authEmail\":\"\",\r\n    \"authPhoneNumber\":\"\",\r\n    \"actTypeId\":2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/customer-enterprise",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customer-enterprise"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateCustomerEnterprise",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let date = Date.now()\r",
+							"pm.globals.set(\"date\", date);\r",
+							"console.log(date)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"documentTypeId\":10,\r\n    \"custTypeId\":6,\r\n    \"custId\": {{custIdInsert}},\r\n    \"phoneNumber\":\"0347173624\",\r\n    \"custName\":\"doanhNghiepTestAuto\",\r\n    \"taxCode\":\"{{date}}\",\r\n    \"birthDate\":\"03/02/2016 00:00:00\",\r\n    \"documentNumber\":\"12345678556\",\r\n    \"dateOfIssue\":\"10/10/2017 00:00:00\",\r\n    \"placeOfIssue\":\"skssss\",\r\n    \"areaCode\":\"B281004002\",\r\n    \"street\":\"số 1\",\r\n    \"areaName\":\"số 1 - Bằng Lũng - Chợ Đồn - Bắc Kạn\",\r\n    \"email\":\"a@gmail.com\",\r\n    \"repName\":\"hien\",\r\n    \"repBirthDate\":\"09/09/1996 00:00:00\",\r\n    \"repGender\":\"2\",\r\n    \"repIdentityTypeId\":1,\r\n    \"repIdentityNumber\":\"1234665678\",\r\n    \"repDateOfIssue\":\"16/06/2010 00:00:00\",\r\n    \"repPlaceOfIssue\":\"ssss\",\r\n    \"repAreaCode\":\"V064003006\",\r\n    \"repStreet\":\"số 1\",\r\n    \"repAreaName\":\"số 1 - Bình Ba - Châu Đức - Bà Rịa Vũng Tàu\",\r\n    \"repPhoneNumber\":\"\",\r\n    \"repEmail\":\"\",\r\n    \"authIdentityNumber\":\"\",\r\n    \"authIdentityTypeId\":\"\",\r\n    \"authDateOfIssue\":null,\r\n    \"authPlaceOfIssue\":\"\",\r\n    \"authName\":\"\",\r\n    \"authBirthDate\":null,\r\n    \"authGender\":\"\",\r\n    \"authAreaName\":\"\",\r\n    \"authStreet\":\"\",\r\n    \"authAreaCode\":\"\",\r\n    \"authEmail\":\"\",\r\n    \"authPhoneNumber\":\"\",\r\n    \"actTypeId\":2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/v1/customer-enterprise/{{custIdInsert}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customer-enterprise",
+						"{{custIdInsert}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCustomerRegister",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.length !=0 ){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/registry-info",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"registry-info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCustomerById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody != null && jsonData.data.listData.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/{{custIdInsert}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"{{custIdInsert}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getVehiclesByPlateNumber",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"});\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.globals.set(\"vehicleId\", jsonData.data.listData[0].vehicleId);\r",
+							"console.log(\"vehicleId Use for After Request:\",jsonData.data.listData[0].vehicleId);\r",
+							"pm.globals.set(\"contractId\", jsonData.data.listData[0].contractId);\r",
+							"console.log(\"contractId Use for After Request:\",jsonData.data.listData[0].contractId);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/vehicles",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"vehicles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findVehicleById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody != null && jsonData.data.listData.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"custId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"vehicleTypeId\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"});\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.globals.set(\"plateNumber\", jsonData.data.listData[0].plateNumber);\r",
+							"console.log(\"plateNumber use for after Request:\",jsonData.data.listData[0].plateNumber);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/contracts/vehicles/{{vehicleId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"contracts",
+						"vehicles",
+						"{{vehicleId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findProfileByVehicle",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with vehicleId:\", pm.globals.get('vehicleId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/contracts/vehicles/{{vehicleId}}/profiles",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"contracts",
+						"vehicles",
+						"{{vehicleId}}",
+						"profiles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findVehicleActived",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/contracts/{{contractId}}/vehicles/active",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"contracts",
+						"{{contractId}}",
+						"vehicles",
+						"active"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findVehicleAssignRFID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with contractId:\", pm.globals.get('contractId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody != null && jsonData.data.listData.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"vehicleId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"plateNumber\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"vehicleTypeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"vehicleGroupId\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/contracts/{{contractId}}/vehicles/assigned-rfid",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"contracts",
+						"{{contractId}}",
+						"vehicles",
+						"assigned-rfid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findVehicleAssignedRFID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with contractId:\", pm.globals.get('contractId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/contracts/{{contractId}}/vehicles/find-assigned-rfid",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"contracts",
+						"{{contractId}}",
+						"vehicles",
+						"find-assigned-rfid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findVehicleNotAssignRFID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with contractId:\", pm.globals.get('contractId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody != null && jsonData.data.listData.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/contracts/{{contractId}}/vehicles/not-assign-rfid",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"contracts",
+						"{{contractId}}",
+						"vehicles",
+						"not-assign-rfid"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getVehicleRegistry",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// console.log(\"Request check with plateNumber:\", pm.globals.get('plateNumber'));\r",
+							"// pm.test(\"Status Code is 200\", function () {\r",
+							"//     pm.response.to.have.status(200);\r",
+							"// \tvar jsonData = JSON.parse(responseBody);\r",
+							"//     pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"// });\r",
+							"// pm.test(\"Body matches string\", function () {\r",
+							"//     var jsonData = JSON.parse(responseBody);\r",
+							"//     if(responseBody != null && jsonData.data.listData.length != 0){\r",
+							"//         pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"//         pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"//     } else {\r",
+							"//         pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"//         pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"//     }\r",
+							"    \r",
+							"// });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/vehicles/registry-info/{{plateNumber}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"vehicles",
+						"registry-info",
+						"{{plateNumber}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getVehicleRegistryInfo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with plateNumber:\", pm.globals.get('plateNumber'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody != null && jsonData.data.listData.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/vehicles/vehicle-registry-info/{{plateNumber}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"vehicles",
+						"vehicle-registry-info",
+						"{{plateNumber}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getVehiclesException",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with plateNumber:\", pm.globals.get('plateNumber'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody != null && jsonData.data.listData.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"exceptionListId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"status\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"vehicleTypeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"licensePlateType\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"rfidSerial\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"plateNumber\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"stationId\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"});\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.globals.set('exceptionListId', jsonData.data.listData[0].exceptionListId);\r",
+							"console.log(\"exceptionListId use for after request:\", jsonData.data.listData[0].exceptionListId)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/vehicles-exception/results",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"vehicles-exception",
+						"results"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getVehiclesExceptionViewDetail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody != null && jsonData.data.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"exceptionListId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"status\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"vehicleTypeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"licensePlateType\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"rfidSerial\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"plateNumber\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"epc\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"plateNumber\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"customerName\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"contractNo\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"stationName\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/vehicles-exception/{{exceptionListId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"vehicles-exception",
+						"{{exceptionListId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getActReason",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"actReasonId\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"actTypeId\");\r",
+							"});\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.globals.set(\"actReasonId\", jsonData.data.listData[0].actReasonId);\r",
+							"console.log(\"actReasonId use for after request:\",jsonData.data.listData[0].actReasonId)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/act-reason",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"act-reason"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getActReasonFindOne",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with actReasonId:\", pm.globals.get('actReasonId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    var id = pm.globals.get('actReasonId');\r",
+							"    pm.expect(jsonData.data.listData[0].actReasonId).to.eql(id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/act-reason/{{actReasonId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"act-reason",
+						"{{actReasonId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getFindActType",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"actTypeId\");\r",
+							"});\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.globals.set(\"actTypeId\", jsonData.data.listData[0].actTypeId);\r",
+							"\r",
+							"console.log(\"actTypeId use for after request:\",jsonData.data.listData[0].actTypeId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/act-type",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"act-type"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getActTypeFindOne",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with actTypeId:\", pm.globals.get('actTypeId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    var id = pm.globals.get('actTypeId');\r",
+							"    pm.expect(jsonData.data.listData[0].actTypeId).to.eql(id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/act-type/{{actTypeId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"act-type",
+						"{{actTypeId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getFindActTypeMapping",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"actTypeId\");\r",
+							"});\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.globals.set(\"actTypeIdMapping\", jsonData.data.listData[0].actTypeId);\r",
+							"\r",
+							"console.log(\"actTypeIdMapping use for after request:\",jsonData.data.listData[0].actTypeId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/act-type-mapping",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"act-type-mapping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getActTypeMAppingFindOne",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with actTypeId:\", pm.globals.get('actTypeIdMapping'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    var id = pm.globals.get('actTypeIdMapping');\r",
+							"    pm.expect(jsonData.data.listData[0].actTypeId).to.eql(id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/act-type/{{actTypeIdMapping}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"act-type",
+						"{{actTypeIdMapping}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getActionHistories",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"actionUserFullName\");\r",
+							"});\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.globals.set('actionAuditId', jsonData.data.listData[0].actionAuditId);\r",
+							"console.log(\"actionAuditId use for after request:\", jsonData.data.listData[0].actionAuditId)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/action-histories",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"action-histories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getActionHistoryDetail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with actionAuditId:\", pm.globals.get('actionAuditId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"newValue\");\r",
+							"    // var jsonData = JSON.parse(responseBody);\r",
+							"    // var id = pm.globals.get('actTypeId');\r",
+							"    // pm.expect(jsonData.data.listData[0].actTypeId).to.eql(id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/action-histories/{{actionAuditId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"action-histories",
+						"{{actionAuditId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getActionReasons",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"name\");\r",
+							"    // pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"});\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.globals.set('idActionReason', jsonData.data.listData[0].actReasonId);\r",
+							"console.log(\"idActionReason use for after request:\", jsonData.data.listData[0].actReasonId)\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/act-reason",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"act-reason"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getActionReasonsId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with idActionReason:\", pm.globals.get('idActionReason'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    console.log(jsonData.data.length);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    console.log(jsonData.data.length);\r",
+							"    if(responseBody != null && jsonData.data.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"name\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"status\");\r",
+							"    } else {\r",
+							"        console.log(\"data null\")\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/action-reasons/{{idActionReason}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"action-reasons",
+						"{{idActionReason}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getActionTypes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody != null && jsonData.data.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"actTypeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"code\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"status\");\r",
+							"    }\r",
+							"    \r",
+							"});\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"var id = Number(jsonData.data[2].actTypeId);\r",
+							"pm.globals.set(\"idActionType\", id);\r",
+							"console.log(pm.globals.get(\"idActionType\"));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/action-types",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"action-types"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "actionVehicleHistory",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// console.log(\"Request check with custId:\", pm.globals.get('custId'));\r",
+							"// pm.test(\"Status Code is 200\", function () {\r",
+							"//     pm.response.to.have.status(200);\r",
+							"// \tvar jsonData = JSON.parse(responseBody);\r",
+							"//     pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"// });\r",
+							"// pm.test(\"Body matches string\", function () {\r",
+							"//     var jsonData = JSON.parse(responseBody);\r",
+							"//     if(responseBody !=null && jsonData.data.listData.length != 0){\r",
+							"//         pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"//         pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"//         pm.expect(pm.response.text()).to.include(\"actionType\");\r",
+							"//         pm.expect(pm.response.text()).to.include(\"actionUserName\");\r",
+							"//     } else {    \r",
+							"//         pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"//         pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"//     }\r",
+							"// });\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/contracts/{{contractId}}/act-vehicle-histories",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"contracts",
+						"{{contractId}}",
+						"act-vehicle-histories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "actionVehicleHistoryExport",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/contracts/{{contractId}}/act-vehicle-histories/export",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"contracts",
+						"{{contractId}}",
+						"act-vehicle-histories",
+						"export"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCountShowData",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"totalCustomer\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"totalContract\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"totalVehicle\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"totalContractProfile\");\r",
+							"    } else {    \r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/count-dashboard",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"count-dashboard"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findActionCustomerHistory",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with custId:\", pm.globals.get('custId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actionType\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actionUserName\");\r",
+							"    } else {    \r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/{{custId}}/act-customers-histories",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"{{custId}}",
+						"act-customers-histories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findActionContractHistory",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with custId:\", pm.globals.get('custId'));\r",
+							"console.log(\"Request check with contractId:\", pm.globals.get('contractId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody != null && jsonData.data.listData.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actionUserName\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actionType\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"userName\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    } else{\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }   \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/{{custId}}/contracts/{{contractId}}/act-contract-histories",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"{{custId}}",
+						"contracts",
+						"{{contractId}}",
+						"act-contract-histories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findActionVehicleHistory",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with custId:\", pm.globals.get('custId'));\r",
+							"console.log(\"Request check with contractId:\", pm.globals.get('contractId'));\r",
+							"console.log(\"Request check with contractId:\", pm.globals.get('vehicleId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody != null && jsonData.data.listData.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actionType\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actionUserName\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actionDate\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"userName\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"reason\");\r",
+							"    } else{\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/{{custId}}/contracts/{{contractId}}/vehicles/{{vehicleId}}/act-vehicle-histories",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"{{custId}}",
+						"contracts",
+						"{{contractId}}",
+						"vehicles",
+						"{{vehicleId}}",
+						"act-vehicle-histories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "serchRfidVehicleHistories",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with vehicleId:\", pm.globals.get('vehicleId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    console.log(jsonData.data.listData.length);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actionType\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actionUserName\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    }\r",
+							"   \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/vehicles/{{vehicleId}}/rfid-vehicle-histories",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"vehicles",
+						"{{vehicleId}}",
+						"rfid-vehicle-histories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getDataContract",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    console.log(jsonData.data.listData.length);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"accountUserId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"contractId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"custId\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    }\r",
+							"});\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.globals.set('contractId', jsonData.data.listData[0].contractId);\r",
+							"console.log(\"contractId use for after request:\", jsonData.data.listData[0].contractId)\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/contracts",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"contracts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findContractById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with contractId:\", pm.globals.get('contractId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    console.log(jsonData.data.listData.length);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"accountUserId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"contractId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"custId\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    }\r",
+							"   \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/contracts/{{contractId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"contracts",
+						"{{contractId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findProfileByContract",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with contractId:\", pm.globals.get('contractId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    console.log(jsonData.data.listData.length);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length != 0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"accountUserId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"contractId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"custId\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    }\r",
+							"   \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/contracts/{{contractId}}/profiles",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"contracts",
+						"{{contractId}}",
+						"profiles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findContractByCustomer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with custId:\", pm.globals.get('custId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"contractNo\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"signName\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"status\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"signDate\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/customers/{{custId}}/contracts",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"{{custId}}",
+						"contracts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCustTypeMapping",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with custId:\", pm.globals.get('custId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"custTypeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"documentTypeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"documentTypeName\");\r",
+							"         pm.expect(pm.response.text()).to.include(\"documentTypeCode\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"createDate\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"status\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"});\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.globals.set('custTypeMappingId', jsonData.data.listData[0].id);\r",
+							"console.log(\"custTypeMappingId use for after request:\", jsonData.data.listData[0].id)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/cust-type-mapping",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"cust-type-mapping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findOneCustTypeMapping",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with custTypeMappingId:\", pm.globals.get('custTypeMappingId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"custTypeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"status\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"documentTypeId\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/cust-type-mapping/{{custTypeMappingId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"cust-type-mapping",
+						"{{custTypeMappingId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllUserKeycloak",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/keycloak/users",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"keycloak",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getDocumentType",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"code\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"val\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"type\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"    }\r",
+							"});\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"var CustTypeId = Number(jsonData.data[0].type);\r",
+							"pm.globals.set('CustTypeId', CustTypeId);\r",
+							"console.log(\"CustTypeId use for after request:\", CustTypeId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/document-types",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"document-types"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getDocumentTypesMobile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"code\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"val\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"type\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"    }\r",
+							"});\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"var CustTypeId = Number(jsonData.data[0].type);\r",
+							"pm.globals.set('CustTypeId', CustTypeId);\r",
+							"console.log(\"CustTypeId use for after request:\", CustTypeId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/mobile/document-types",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"mobile",
+						"document-types"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getDocumentByCustTypeId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with CustTypeId:\", pm.globals.get('CustTypeId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"code\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"val\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/document-types/{{CustTypeId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"document-types",
+						"{{CustTypeId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "searchPlateNumberEtc360",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"vehicleId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"custId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"contractId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"plateNumber\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"vehicleGroupId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"seatNumber\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"netWeight\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"cargoWeight\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"epc\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"rfidSerial\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/etc360/vehicle/{{plateNumber}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"etc360",
+						"vehicle",
+						"{{plateNumber}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findOtherTransactionHistories",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with contractId:\", pm.globals.get('contractId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"code\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"createUser\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/contracts/{{contractId}}/other-transaction-histories",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"contracts",
+						"{{contractId}}",
+						"other-transaction-histories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "exportOtherTransactionHistories",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/contracts/{{contractId}}/other-transaction-histories/export",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"contracts",
+						"{{contractId}}",
+						"other-transaction-histories",
+						"export"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPromotionAssigns",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with contractId:\", pm.globals.get('contractId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/promotions/assigns",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"promotions",
+						"assigns"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPromotions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with contractId:\", pm.globals.get('contractId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/promotions",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"promotions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getServiceFees",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"code\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"name\");\r",
+							"         pm.expect(pm.response.text()).to.include(\"saleTransDateFrom\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"saleTransDateTo\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"saleTransId\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/services-fees",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"services-fees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "searchTicketPurchaseHistories",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with vehicleId:\", pm.globals.get('vehicleId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/vehicles/{{vehicleId}}/ticket-purchase-histories",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"vehicles",
+						"{{vehicleId}}",
+						"ticket-purchase-histories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getServiceFee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with vehicleId:\", pm.globals.get('vehicleId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"serviceFeeName\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"serviceFeeCode\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actionTypeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actTypeName\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actTypeCode\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actReasonId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actReasonName\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"status\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"isActive\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"fee\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"});\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.globals.set('actReasonIdServiceChange', jsonData.data.listData[0].actReasonId);\r",
+							"console.log(\"actReasonIdServiceChange use for after request:\", jsonData.data.listData[0].actReasonId)\r",
+							"\r",
+							"pm.globals.set('serviceFeeId', jsonData.data.listData[0].id);\r",
+							"console.log(\"serviceFeeId use for after request:\", jsonData.data.listData[0].id)\r",
+							"pm.globals.set('actionTypeIdServiceFee', jsonData.data.listData[0].actionTypeId);\r",
+							"console.log(\"actionTypeIdServiceFee use for after request:\", jsonData.data.listData[0].actionTypeId)\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/service-charges",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"service-charges"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getFeesByActionTypeId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"serviceFeeName\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"serviceFeeCode\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actionTypeId\");\r",
+							"         pm.expect(pm.response.text()).to.include(\"actReasonId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"status\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"serviceFeeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"fee\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"docRefer\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/fees?actionTypeId={{actionTypeIdServiceFee}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"fees"
+					],
+					"query": [
+						{
+							"key": "actionTypeId",
+							"value": "{{actionTypeIdServiceFee}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getDetailServiceFeeByReason",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"serviceFeeName\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"serviceFeeCode\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actionTypeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actReasonId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"status\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"serviceFeeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"fee\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/service-charges/act-reasons/{{actReasonIdServiceChange}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"service-charges",
+						"act-reasons",
+						"{{actReasonIdServiceChange}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getDetailServiceFee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"serviceFeeName\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"serviceFeeCode\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actionTypeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"actReasonId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"status\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"serviceFeeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"fee\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"data\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/service-charges/{{serviceFeeId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"service-charges",
+						"{{serviceFeeId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getFeeMobile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"servicePlanId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"servicePlanTypeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"vehicleGroupId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"chargeMethodId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"fee\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/mobile/service-plans/fee",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"mobile",
+						"service-plans",
+						"fee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "searchTicketPrices",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"servicePlanId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"servicePlanTypeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"ocsCode\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"vehicleGroupId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"stageId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"fee\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"scope\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"status\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"});\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.globals.set('servicePlanId', jsonData.data.listData[0].servicePlanId);\r",
+							"console.log(\"servicePlanId use for after request:\",jsonData.data.listData[0].servicePlanId);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/ticket-prices",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"ticket-prices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getTicketType",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.listData.length !=0){\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"servicePlanTypeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"name\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    } else {\r",
+							"        pm.expect(pm.response.text()).to.include(\"listData\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"count\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/ticket-prices/type",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"ticket-prices",
+						"type"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findTicketPricesById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(\"Request check with servicePlanId:\", pm.globals.get('servicePlanId'));\r",
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"\tvar jsonData = JSON.parse(responseBody);\r",
+							"    pm.expect(jsonData.mess.description).to.eql(\"Thành công\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    if(responseBody !=null && jsonData.data.length !=0){\r",
+							"        pm.expect(jsonData.data.servicePlanId).to.eql(pm.globals.get('servicePlanId'));\r",
+							"        pm.expect(pm.response.text()).to.include(\"servicePlanCode\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"servicePlanTypeId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"vehicleGroupId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"ocsCode\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"vehicleGroupId\");\r",
+							"        pm.expect(pm.response.text()).to.include(\"routeId\");\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "accessToken",
+							"value": "{{access_token}}",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/v1/ticket-prices/{{servicePlanId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"ticket-prices",
+						"{{servicePlanId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://10.60.108.172:9789",
+			"disabled": true
+		},
+		{
+			"key": "keycloack",
+			"value": "http://10.60.108.172:8482",
+			"disabled": true
+		}
+	]
+}
